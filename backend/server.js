@@ -6,7 +6,9 @@ import helmet from "helmet";
 import bodyParser from "body-parser";
 import colors from "colors";
 import connectDatabase from "./config/db.js";
-import authRoutes from "./routes/authRoutes.js";
+import authRoutes from "./routes/auth.routes.js";
+import paperRoutes from "./routes/paper.routes.js";
+import analyticsRoutes from "./routes/analytics.routes.js";
 
 const app = express();
 
@@ -16,6 +18,9 @@ app.use(morgan("combined"));
 app.use(express.json());
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
+
+// Static folder for uploaded PDFs
+app.use('/uploads', express.static('uploads'));
 app.use(helmet());
 app.use(bodyParser.json());
 
@@ -28,6 +33,8 @@ app.get("/", (req, res) =>
 
 
 app.use("/api/auth", authRoutes);
+app.use("/api/papers", paperRoutes);
+app.use("/api/analytics", analyticsRoutes);
 
 
 const PORT = process.env.PORT || 5000;
